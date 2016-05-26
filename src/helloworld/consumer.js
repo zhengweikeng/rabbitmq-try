@@ -1,5 +1,5 @@
 const amqp = require('amqp')
-
+const util = require('util')
 const conn = amqp.createConnection({host: 'localhost'})
 
 conn.on('error', (e) => {
@@ -13,7 +13,10 @@ conn.on('ready', () => {
     console.log(`Queue ${queue.name} is open`)
     
     queue.subscribe((message, headers, deliveryInfo, messageObject) => {
-      console.log(`Got a message with routing key ${deliveryInfo.routingKey}`);
+      console.log(`message: ${util.inspect(message)}`)
+      console.log(`headers: ${util.inspect(headers)}`)
+      console.log(`deliveryInfo: ${util.inspect(deliveryInfo)}`)
+      console.log(`messageObject: ${util.inspect(messageObject)}`)
     })
   })
 })
