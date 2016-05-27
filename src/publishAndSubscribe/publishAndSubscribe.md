@@ -1,0 +1,8 @@
+### Exchanges
+这次引入了Exchanges的概念。通过前面我们构造了一个生产者producer向消费者consumer发送数据的案例。
+
+其实，本质上来说producer是不会直接将发送消息到rabbitmq的队列的。producer只是将消息发送到了Exchange，再由Exchange将消息发送到队列。
+
+因此一个Exchange扮演了两方面的角色，一个是从producer接收数据，一个是向队列发送数据。
+
+而一个Exchange必须明确知道消息的去处。是发送到一个具体的队列，还是给多个队列，还是将其丢弃。这些都是由Exchange的类型决定的。
