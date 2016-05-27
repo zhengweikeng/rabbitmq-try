@@ -9,17 +9,17 @@ conn.on('error', (e) => {
 conn.on('ready', () => {
   console.log('ready!!')
   
-  conn.queue('first-queue', {
+  conn.queue('second-queue', {
     durable: true
   }, (queue) => {
     console.log(`Queue ${queue.name} is open`)
     
     queue.subscribe({
       ack: true,
-      fetchCount: 1
+      prefetchCount: 1
     }, (message, headers, deliveryInfo, ack) => {
-      const secs = msg.content.toString().split('.').length - 1
-      console.log(`Got a message with routing key ${deliveryInfo.routingKey}, message is: ${message.content.toString()}`)
+      const secs = message.data.toString().split('.').length - 1
+      console.log(`Got a message with routing key ${deliveryInfo.routingKey}, message is: ${message.data.toString()}`)
       
       setTimeout(() => {
         console.log('task done!!')

@@ -8,8 +8,8 @@ conn.on('error', (e) => {
 
 conn.on('ready', () => {
   console.log('ready!!')
-  
-  conn.publish('second-queue', 'workqueues', {
-    deliveryMode: 'persistent'
+  const msg = process.argv.slice(2).join(' ') || "Hello World!";
+  conn.publish('second-queue', msg, {
+    deliveryMode: 2
   })
 })
