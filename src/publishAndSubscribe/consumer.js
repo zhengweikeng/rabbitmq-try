@@ -13,7 +13,7 @@ conn.on('ready', () => {
       
       queue.bind(exchange, '', () => {
         queue.subscribe({ack: false}, (message, headers, deliveryInfo, ack) => {
-          console.log(`Got a message with routing key ${deliveryInfo.routingKey}, message is: ${message.data.toString()}`)
+          console.log(`Got a message with from exchange: ${deliveryInfo.exchange}, message is: ${message.data.toString()}`)
         })
       })
     })

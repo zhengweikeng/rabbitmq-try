@@ -31,7 +31,7 @@ conn.on('ready', () => {
       prefetchCount: 1
     }, (message, headers, deliveryInfo, ack) => {
       const secs = message.data.toString().split('.').length - 1
-      console.log(`Got a message with routing key ${deliveryInfo.routingKey}, message is: ${message.data.toString()}`)
+      console.log(`Got a message from queue: ${deliveryInfo.queue}, message is: ${message.data.toString()}`)
       
       setTimeout(() => {
         console.log('task done!!')

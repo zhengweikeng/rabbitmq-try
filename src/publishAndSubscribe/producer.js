@@ -15,10 +15,10 @@ conn.on('ready', () => {
     durable: false
   })
   // 由于exchange的类型是fanout，因此第一个参数直接忽略
-  exchange.publish('logsAll', msg, {})
+  exchange.publish('', msg, {})
   
   setTimeout(() => {
-    conn.close()
+    conn.disconnect()
     process.exit(0)
   }, 500)
 })
