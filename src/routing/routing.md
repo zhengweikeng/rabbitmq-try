@@ -85,6 +85,6 @@ node consumer.js
 # bind finish
 
 node producer.js  info "it is a info"
-node producer.js  info "it is an error"
-node producer.js  info "it is a warn"
+node producer.js  error "it is an error"
+node producer.js  warn "it is a warn"
 ```
