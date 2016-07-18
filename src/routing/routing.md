@@ -88,3 +88,18 @@ node producer.js  info "it is a info"
 node producer.js  error "it is an error"
 node producer.js  warn "it is a warn"
 ```
+
+#### fanout和direct的相互转化
+也可以将direct转化为fanout，只要将每个队列都绑定相同的路由routing_key即可实现。
+```javascript
+// productor
+const exchange = conn.exchange('direct_logs', {
+  type: 'direct',
+  durable: false
+})
+  
+exchange.publish('key', msg, {})
+
+// consumer
+queue.bind(exchange, 'key')
+```
