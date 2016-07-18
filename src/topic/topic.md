@@ -50,7 +50,7 @@ conn.on('ready', () => {
   })
   
   exchange.publish(key, msg, {})
-  console.log(`send a message: ${msg}, route is: ${severity}`)
+  console.log(`send a message: ${msg}, route is: ${key}`)
   
   setTimeout(() => {
     conn.disconnect()
@@ -78,6 +78,71 @@ conn.on('ready', () => {
       
       args.forEach((arg) => queue.bind(exchange, arg, ()=> console.log('bind finish')))
       console.log(`bind to route: ${args}`)
+          
+      queue.subscribe({ack: false}, (message, headers, deliveryInfo, ack) => {
+        console.log(`Got a message with from exchange: ${deliveryInfo.exchange}`)
+        console.log(`route is: ${deliveryInfo.routingKey}, message is: ${message.data.toString()}`)
+      })
+    })
+  })
+})
+```
+
+### 与其他类型的exchange的转化
+将topic转化为direct很简单，只要不使用\*和\#即可。
+
+而将topic转化为fanout，只需要先转化为direct，再由direct转化fanout。
+
+同理，我们也可以利用topic模拟实现默认exchange的消息队列模式
+```javascript
+// 生产者
+const amqp = require('amqp')
+const conn = amqp.createConnection({host: 'localhost'})
+conn.on('error', (e) => {
+  console.log(e)
+})
+
+conn.on('ready', () => {
+  console.log('ready!!')
+  
+  const args = process.argv.slice(2)
+  const msg = args.slice(1).join(' ') || 'Hello World!'
+  
+  // 这里指定空字符串的exchange
+  const exchange = conn.exchange('', {
+    type: 'topic',
+    durable: false
+  })
+  
+  exchange.publish('log', msg, {})
+  console.log(`send a message: ${msg}, route is: ${key}`)
+  
+  setTimeout(() => {
+    conn.disconnect()
+    process.exit(0)
+  }, 500)
+})
+
+// 消费者
+const amqp = require('amqp')
+const conn = amqp.createConnection({host: 'localhost'})
+
+const args = process.argv.slice(2)
+if (args.length === 0) {
+  args.push('info')
+}
+
+conn.on('error', (e) => {
+  console.log(e)
+})
+
+conn.on('ready', () => {
+  conn.exchange('', { type: 'topic', durable: false }, (exchange) => {
+    conn.queue('', { exclusive: true }, (queue) => {
+      console.log(`Queue ${queue.name} is open`)
+      
+      // 将队列绑定到指定的路由上
+      queue.bind(exchange, 'log')
           
       queue.subscribe({ack: false}, (message, headers, deliveryInfo, ack) => {
         console.log(`Got a message with from exchange: ${deliveryInfo.exchange}`)
