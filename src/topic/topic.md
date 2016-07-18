@@ -5,6 +5,8 @@ Topic类型的exchange，可以做到比direct类型的exchange更大的扩展�
 
 我们可以发送一些描述动物属性的信息给队列。如下图所示。
 
+![示例](https://raw.githubusercontent.com/zhengweikeng/rabbitmq-try/master/src/topic/python-five.png)
+
 这种模式下，routeKey必须为一系列字母组成，并且以.分隔，如stock.usd.nyse。
 
 而且rabbitmq还提供了两种通配符，*和#。
@@ -13,8 +15,8 @@ Topic类型的exchange，可以做到比direct类型的exchange更大的扩展�
 \#:可以零或者以上的单词
 
 这里我们将动物描述为：speed.colour.species  
-将*.orange.*这种类型的routeKey发送到队列1。  
-将*.*.rabbit和lazy.#的routeKey发送到队列2。
+将\*.orange.\*这种类型的routeKey发送到队列1。  
+将\*.\*.rabbit和lazy.#的routeKey发送到队列2。
 
 因此当你的routeKey为quick.orange.rabbit时，两个队列都将收到消息；  
 lazy.orange.elephant也是将被两者收到；  
